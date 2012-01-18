@@ -3,3 +3,11 @@ build
 *.a
 *.so
 *~
+*.so
+*.a
+*.la
+*~
+*#
+.lock*
+*.pyc
+*.pyo
