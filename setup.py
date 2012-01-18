@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import os
-from setuptools import setup
+import setuptools
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-setup(
+setuptools.setup(
     name = "MakoCPP",
     version = "0.1",
     author = "Zhou Ming",
@@ -14,7 +14,7 @@ setup(
     description = (""),
     license = "LGPL",
     keywords = "C/C++ template using mako",
-    packages=['makocpp'],
+    packages = setuptools.find_packages(),
     long_description=read('README'),
     classifiers=[
         "Development Status :: 3 - Alpha",
