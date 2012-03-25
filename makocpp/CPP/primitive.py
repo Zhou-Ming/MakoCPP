@@ -13,6 +13,10 @@ def comma(args):
     return ', '.join(args)
 
 NO_SEMICOLON = (
+"""
+should not append a semicolon when a statement starts with one of the
+following
+"""
     (
         '#',
         '/',
@@ -27,6 +31,9 @@ NO_SEMICOLON = (
     )
 
 def add_semicolon(content):
+"""
+Added semicolon to finish a (list of) statement(s)
+"""
     if isinstance(content, list):
         ret = []
         for i in content:
