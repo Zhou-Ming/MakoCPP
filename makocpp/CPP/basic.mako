@@ -1,5 +1,5 @@
 <%!
-from C import primitive
+from makocpp.CPP import primitive
 %>
 
 <%def name="if_guard(header_name, cbody, cppbody)" filter='trim'>

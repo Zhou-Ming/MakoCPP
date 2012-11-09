@@ -17,6 +17,7 @@ setuptools.setup(
     packages = setuptools.find_packages(
         exclude=["tests"],
         ),
+    package_data = {'makocpp': ['CPP/*.mako',],},
     long_description=read('README'),
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",

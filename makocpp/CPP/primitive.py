@@ -2,6 +2,14 @@
 """
 """
 
+_Indentation = '  '
+
+def indent():
+    return _Indentation
+
+def set_indent(indentation):
+    _Indentation = indentation
+
 def _tolist(x):
     if isinstance(x, list):
         return x
@@ -13,10 +21,6 @@ def comma(args):
     return ', '.join(args)
 
 NO_SEMICOLON = (
-"""
-should not append a semicolon when a statement starts with one of the
-following
-"""
     (
         '#',
         '/',
@@ -31,9 +35,9 @@ following
     )
 
 def add_semicolon(content):
-"""
-Added semicolon to finish a (list of) statement(s)
-"""
+    """
+    Added semicolon to finish a (list of) statement(s)
+    """
     if isinstance(content, list):
         ret = []
         for i in content:
@@ -50,9 +54,9 @@ Added semicolon to finish a (list of) statement(s)
 
 def body(content):
     if isinstance(content, list):
-        return '\n'.join(add_semicolon(content))
+        return '\n'.join(content)
     else:
-        return add_semicolon(content)
+        return content
 
 def defined(name):
     return 'defined(' + name + ')'
@@ -75,37 +79,37 @@ def bool_not(content):
     return '!' + content
 
 def bool_equal(content):
-    _bit_op(content, ' == ')
+    return _bit_op(content, ' == ')
 
 def bool_not_equal(content):
-    _bit_op(content, ' != ')
+    return _bit_op(content, ' != ')
 
 def bool_greater_than(content):
-    _bit_op(content, ' > ')
+    return _bit_op(content, ' > ')
 
 def bool_lesser_than(content):
-    _bit_op(content, ' < ')
+    return _bit_op(content, ' < ')
 
 def bool_greater_than_or_equal_to(content):
-    _bit_op(content, ' >= ')
+    return _bit_op(content, ' >= ')
 
 def bool_lesser_than_or_equal_to(content):
-    _bit_op(content, ' <= ')
+    return _bit_op(content, ' <= ')
 
 def bool_and(content):
-    _bit_op(content, ' && ')
+    return _bit_op(content, ' && ')
 
 def bit_and(content):
-    _bit_op(content, ' & ')
+    return _bit_op(content, ' & ')
 
 def bool_or(content):
-    _bit_op(content, ' || ')
+    return _bit_op(content, ' || ')
 
 def bit_or(content):
-    _bit_op(content, ' | ')
+    return _bit_op(content, ' | ')
 
 def bit_xor(content):
-    _bit_op(content, ' ^ ')
+    return _bit_op(content, ' ^ ')
 
 def bit_complement(content):
     return '~' + content
@@ -138,7 +142,7 @@ def variable(t, name, value=None):
     else:
         return t + ' ' +  name
 
-def _ifelse(condition, true_content, false_content, formatter):
+def _ifelse(condition, true_content, false_content, formatter, indentation=''):
     ret = []
     if isinstance(condition, list):
         assert(isinstance(true_content, list))
@@ -149,13 +153,13 @@ def _ifelse(condition, true_content, false_content, formatter):
                 ret.append(formatter[1].format(condition[i]))
             else:
                 ret.append(formatter[0].format(condition[i]))
-            ret += _tolist(true_content[i])
+            ret += [indentation + x for x in _tolist(true_content[i])]
     else:
         ret.append(formatter[0].format(condition))
-        ret += _tolist(true_content)
+        ret += [indentation + x for x in _tolist(true_content)]
     if false_content:
         ret.append(formatter[2][0])
-        ret += _tolist(false_content)
+        ret += [indentation + x for x in _tolist(false_content)]
     ret.append(formatter[3][0])
     return ret
 
@@ -181,7 +185,8 @@ _IFDEF_PREPROCESS = (
     )
 
 def ifelse(condition, true_content, false_content=None):
-    return _ifelse(condition, true_content, false_content, _IFELSE_STATEMENT)
+    return _ifelse(condition, true_content, false_content,
+		   _IFELSE_STATEMENT, indent())
 
 def ifdef(condition, true_content, false_content=None):
     return _ifelse(condition, true_content, false_content, _IFDEF_PREPROCESS)
@@ -194,7 +199,7 @@ def func_dec(ret, name, args):
 
 def func_def(ret, name, args, content):
     ret = [ret + ' ' + name + '(' + comma(args) + ')', '{']
-    ret += _tolist(content)
+    ret += [indent() + x for x in _tolist(content)]
     ret.append('}')
     return ret
 
